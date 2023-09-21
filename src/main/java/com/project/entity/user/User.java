@@ -60,7 +60,7 @@ public class User {
     private UserRole userRole;
 
     //Note: StudentInfo
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos;  //set olabilir ??
 
     //-LessonProgram

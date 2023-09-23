@@ -5,7 +5,7 @@ import com.project.contactmessage.dto.ContactMessageResponse;
 import com.project.contactmessage.dto.ContactMessageUpdateRequest;
 import com.project.contactmessage.entity.ContactMessage;
 import com.project.contactmessage.service.ContactMessageService;
-import com.project.payload.response.ResponseMessage;
+import com.project.payload.response.business.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.project.payload.response;
+package com.project.payload.response.authentication;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

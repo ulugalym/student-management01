@@ -27,8 +27,8 @@ public abstract class BaseUserResponse {
     private String phoneNumber;
     private Gender gender;
     private String email;
-    private Set<LessonProgram> lessonPrograms;
-    private Boolean isAdvisorTeacher;
+    //private Set<LessonProgram> lessonPrograms;
+    //private Boolean isAdvisorTeacher;
     private String userRole;
 
 }

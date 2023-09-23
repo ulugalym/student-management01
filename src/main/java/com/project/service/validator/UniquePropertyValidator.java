@@ -1,7 +1,9 @@
 package com.project.service.validator;
 
+import com.project.entity.user.User;
 import com.project.exception.ConflictException;
 import com.project.payload.messages.ErrorMessages;
+import com.project.payload.request.abstracts.BaseUserRequest;
 import com.project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,36 @@ import org.springframework.stereotype.Component;
 public class UniquePropertyValidator {
 
     private final UserRepository userRepository;
+
+    public void checkUniqueProperties(User user, BaseUserRequest baseUserRequest){
+        String updatedUsername = "";
+        String updatedSsn = "";
+        String updatedPhone = "";
+        String updatedEmail = "";
+        boolean isChanged = false;
+
+        if(! user.getUsername().equalsIgnoreCase(baseUserRequest.getUsername())){
+            updatedUsername = baseUserRequest.getUsername();
+            isChanged= true;
+        }
+        if(!user.getSsn().equalsIgnoreCase(baseUserRequest.getSsn())){
+            updatedSsn = baseUserRequest.getSsn();
+            isChanged = true;
+        }
+        if(!user.getPhoneNumber().equalsIgnoreCase(baseUserRequest.getPhoneNumber())){
+            updatedPhone = baseUserRequest.getPhoneNumber();
+            isChanged = true;
+        }
+        if(!user.getEmail().equalsIgnoreCase(baseUserRequest.getEmail())){
+            updatedEmail = baseUserRequest.getEmail();
+            isChanged = true;
+        }
+
+        if(isChanged){
+            checkDuplicate(updatedUsername,updatedSsn,updatedPhone,updatedEmail);
+        }
+
+    }
 
     public void checkDuplicate(String username,String ssn,String phone,String email){
 

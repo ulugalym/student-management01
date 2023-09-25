@@ -88,11 +88,12 @@ public class WebSecurityConfig {
     }
 
     private static final String[]AUTH_WHILE_LIST = {
-      "/",
-      "index.html",
-      "/css/**",
-      "/images/**",
-      "/js/**",
-      "/contactMessages/save"
+            "/",
+            "index.html",
+            "/css/**",
+            "/images/**",
+            "/js/**",
+            "/contactMessages/save",
+            "/auth/login"
     };
 }

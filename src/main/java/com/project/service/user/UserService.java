@@ -8,6 +8,7 @@ import com.project.payload.mappers.UserMapper;
 import com.project.payload.messages.ErrorMessages;
 import com.project.payload.messages.SuccessMessages;
 import com.project.payload.request.user.UserRequest;
+import com.project.payload.request.user.UserRequestWithoutPassword;
 import com.project.payload.response.abstracts.BaseUserResponse;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.UserResponse;
@@ -23,7 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -133,9 +136,24 @@ public class UserService {
     }
 
     //Note: updateAdminOrDeanOrViceDean() ***************************************
-    public ResponseEntity<BaseUserResponse> updateUser(UserRequest userRequest, Long userId) {
+    public ResponseMessage<BaseUserResponse> updateUser(UserRequest userRequest, Long userId) {
         // !!! id control
         User user = isUserExist(userId);
+        // !!! TODO : built_in kontrolu yapilacak
+        // !!! unique controller
+        uniquePropertyValidator.checkUniqueProperties(user,userRequest);
+        // !!! DTO --> POJO
+        User updatedUser = userMapper.mapUserRequestToUpdatedUser(userRequest,userId);
+        // !!! Password Encoder
+        updatedUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+
+        User saveUser = userRepository.save(updatedUser);
+
+        return ResponseMessage.<BaseUserResponse>builder()
+                .message(SuccessMessages.USER_UPDATE_MESSAGE)
+                .httpStatus(HttpStatus.OK)
+                .object(userMapper.mapUserToUserResponse(saveUser))
+                .build();
 
 
     }
@@ -143,5 +161,49 @@ public class UserService {
     public User isUserExist(Long userId){
         return userRepository.findById(userId).orElseThrow(()->
                 new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_MESSAGE,userId)));
+    }
+
+    //Note: updateUserForUsers() ************************************************
+    public ResponseEntity<String> updateUserForUsers(UserRequestWithoutPassword userRequest, HttpServletRequest request) {
+
+        String userName = (String) request.getAttribute("username");
+
+        User user = userRepository.findByUsernameEquals(userName);
+
+        // TODO : built_in control (ODEV)
+
+        // !!! unique control
+        uniquePropertyValidator.checkUniqueProperties(user,userRequest);
+        // !!! update islemi
+        user.setBirthDay(userRequest.getBirthDay());
+        user.setEmail(userRequest.getEmail());
+        user.setPhoneNumber(userRequest.getPhoneNumber());
+        user.setGender(userRequest.getGender());
+        user.setBirthPlace(userRequest.getBirthPlace());
+        user.setName(userRequest.getName());
+        user.setSurname(userRequest.getSurname());
+        user.setSsn(userRequest.getSsn());
+        //TODO : eksik field control
+
+        userRepository.save(user);
+
+        String message = SuccessMessages.USER_UPDATE_MESSAGE;
+
+        return ResponseEntity.ok(message);
+
+    }
+
+    // Note : getByName() ********************************************************
+    public List<UserResponse> getUserByName(String name) {
+        return userRepository.getUserByNameContaining(name)
+                .stream()
+                .map(userMapper::mapUserToUserResponse)
+                .collect(Collectors.toList());
+    }
+
+    // Note: Runner icin yazildi *************************************************
+    public long countAllAdmins(){
+
+        return userRepository.countAdmin(RoleType.ADMIN);
     }
 }

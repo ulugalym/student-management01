@@ -3,7 +3,7 @@ package com.project.service.validator;
 import com.project.entity.user.User;
 import com.project.exception.ConflictException;
 import com.project.payload.messages.ErrorMessages;
-import com.project.payload.request.abstracts.BaseUserRequest;
+import com.project.payload.request.abstracts.AbstractUserRequest;
 import com.project.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class UniquePropertyValidator {
 
     private final UserRepository userRepository;
 
-    public void checkUniqueProperties(User user, BaseUserRequest baseUserRequest){
+    public void checkUniqueProperties(User user, AbstractUserRequest baseUserRequest){
         String updatedUsername = "";
         String updatedSsn = "";
         String updatedPhone = "";

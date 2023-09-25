@@ -1,6 +1,8 @@
 package com.project.controller.user;
 
+import com.project.payload.request.abstracts.BaseUserRequest;
 import com.project.payload.request.user.UserRequest;
+import com.project.payload.request.user.UserRequestWithoutPassword;
 import com.project.payload.response.abstracts.BaseUserResponse;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.UserResponse;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -62,8 +65,24 @@ public class UserController {
     //Note: updateAdminOrDeanOrViceDean() ***************************************
     @PutMapping("/update/{userId}")
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    public ResponseEntity<BaseUserResponse>updateAdminOrDeanOrViceDean(@RequestBody @Valid UserRequest userRequest,
+    public ResponseMessage<BaseUserResponse>updateAdminOrDeanOrViceDean(@RequestBody @Valid UserRequest userRequest,
                                                                        @PathVariable Long userId){
         return userService.updateUser(userRequest,userId);
     }
+
+    //Note: updateUserForUsers() ************************************************
+    @PatchMapping("/updateUser")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
+    public ResponseEntity<String>updateUser(@RequestBody @Valid UserRequestWithoutPassword userRequestWithoutPassword,
+                                            HttpServletRequest request){
+        return userService.updateUserForUsers(userRequestWithoutPassword,request);
+    }
+
+    // Note : getByName() ********************************************************
+    @GetMapping("/getUserByName") //http://localhost:8081/user/getUserByName?name=user1
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public List<UserResponse>getUserByName(@RequestParam(name = "name")String name){
+        return userService.getUserByName(name);
+    }
+
 }

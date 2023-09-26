@@ -14,5 +14,9 @@ public class ErrorMessages {
     public static final String NOT_FOUND_USER_USERROLE_MESSAGE = "Error : User not found with user-role %s";
     public static final String NOT_FOUND_USER_MESSAGE = "Error : User not found with id %s";
     public static final String NOT_FOUND_TEACHER_MESSAGE = "Error : Teacher not found with id %s";
-    public static final String NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME = "Error : Advisor Teacher with username   %s not found";
+    public static final String NOT_FOUND_ADVISOR_MESSAGE = "Error : Advisor Teacher not found with id %s";
+    public static final String NOT_EXIST_ADVISOR_MESSAGE = "Error : Advisor Teacher  with id %s is not exist";
+    public static final String ALREADY_EXIST_ADVISOR_MESSAGE = "Error : Advisor Teacher  with id %s is already exist";
+    public static final String NOT_FOUND_ADVISOR_MESSAGE_WITH_USERNAME = "Error: Advisor Teacher with username %s not found";
+    public static final String NOT_FOUND_STUDENTS_MESSAGE ="Error: Student not found with id %s";
 }

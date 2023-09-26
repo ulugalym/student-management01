@@ -4,6 +4,7 @@ import com.project.payload.request.user.TeacherRequest;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.StudentResponse;
 import com.project.payload.response.user.TeacherResponse;
+import com.project.payload.response.user.UserResponse;
 import com.project.service.user.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,29 @@ public class TeacherController {
         String userName = request.getHeader("username");
         return teacherService.getAllStudentByAdvisorUsername(userName);
     }
+
+    //TODO ; AddLessonProgramToTeachersLessonProgram eklenecek
+
+    // Note : SaveAdvisorTeacherByTeacherId() ***********************
+    @PreAuthorize("hasAnyAuthorite('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PatchMapping("/saveAdvisorTeacher/{teacherId}")   //http://localhost:8081/teacher/saveAdvisor/1 +PATCH
+    public ResponseMessage<UserResponse>saveAdvisorTeacher(@PathVariable Long teacherId){
+        return teacherService.saveAdvisorTeacher(teacherId);
+    }
+
+    //Note : deleteAdvisorTeacherById() *******************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @DeleteMapping("/deleteAdvisorTeacherById/{id}")
+    public ResponseMessage<UserResponse>deleteAdvisorTeacherById(@PathVariable Long id){
+        return teacherService.deleteAdvisorTeacherById(id);
+    }
+
+    // Note: getAllAdvisorTeacher() *************************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @GetMapping("/getAllAdvisorTeacher")
+    public List<UserResponse>getAllAdvisorTeacher(){
+        return teacherService.getAllAdvisorTeacher();
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.project.service.user;
 import com.project.entity.enums.RoleType;
 import com.project.entity.user.User;
 import com.project.exception.BadRequestException;
+import com.project.exception.ConflictException;
 import com.project.exception.ResourceNotFoundException;
 import com.project.payload.mappers.UserMapper;
 import com.project.payload.messages.ErrorMessages;
@@ -11,6 +12,7 @@ import com.project.payload.request.user.TeacherRequest;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.StudentResponse;
 import com.project.payload.response.user.TeacherResponse;
+import com.project.payload.response.user.UserResponse;
 import com.project.repository.user.UserRepository;
 import com.project.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ public class TeacherService {
     private final UniquePropertyValidator uniquePropertyValidator;
     private final UserMapper userMapper;
     private final UserRoleService userRoleService;
-    private final PasswordEncoder passwordEncoder
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseMessage<TeacherResponse> saveTeacher(TeacherRequest teacherRequest) {
 
@@ -116,7 +118,66 @@ public class TeacherService {
 
     public User getTeacherByUsername(String teacherUsername){
 
-        return userRepository.findByUsernameEquals(teacherUsername)
+        return userRepository.findByUsernameEquals(teacherUsername);
     }
 
+    // Note : SaveAdvisorTeacherByTeacherId() ***********************
+    public ResponseMessage<UserResponse> saveAdvisorTeacher(Long teacherId) {
+        // !!! id control
+        User teacher = isUserExist(teacherId);
+        // !!! id ile gelen user, teacher mi ??
+        if(!(teacher.getUserRole().getRoleType().equals(RoleType.TEACHER))){
+           throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_ADVISOR_MESSAGE,teacherId));
+        }
+        // !!! zaten advisor ise
+        if(Boolean.TRUE.equals(teacher.getIsAdvisor())){
+            throw new ConflictException(String.format(ErrorMessages.ALREADY_EXIST_ADVISOR_MESSAGE,teacherId));
+        }
+
+        teacher.setIsAdvisor(Boolean.TRUE);
+        userRepository.save(teacher);
+
+        return ResponseMessage.<UserResponse>builder()
+                .message(SuccessMessages.ADVISOR_TEACHER_SAVE)
+                .object(userMapper.mapUserToUserResponse(teacher))
+                .httpStatus(HttpStatus.OK)
+                .build();
+
+    }
+
+    //Note : deleteAdvisorTeacherById() *******************************
+    public ResponseMessage<UserResponse> deleteAdvisorTeacherById(Long teacherId) {
+        User teacher = isUserExist(teacherId);
+        // !!! id ile gelen user, teacher mi ??
+        if(!(teacher.getUserRole().getRoleType().equals(RoleType.TEACHER))){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_ADVISOR_MESSAGE,teacherId));
+        }
+        // !!! zaten advisor degil ise
+        if(Boolean.FALSE.equals(teacher.getIsAdvisor())){
+            throw new ConflictException(String.format(ErrorMessages.NOT_EXIST_ADVISOR_MESSAGE,teacherId));
+        }
+
+        teacher.setIsAdvisor(Boolean.FALSE);
+        userRepository.save(teacher);
+
+        // !!! silinen adv.teacher in student'leri varsa bu iliskiyi koparmamiz gerekiyor
+        List<User>allStudents = userRepository.findByAdvisorTeacherId(teacherId);
+        if(!allStudents.isEmpty()){
+            allStudents.forEach(students->students.setAdvisorTeacherId(null));
+        }
+
+        return ResponseMessage.<UserResponse>builder()
+                .message(SuccessMessages.ADVISOR_TEACHER_DELETE)
+                .object(userMapper.mapUserToUserResponse(teacher))
+                .httpStatus(HttpStatus.OK)
+                .build();
+    }
+
+    // Note: getAllAdvisorTeacher() *************************************
+    public List<UserResponse> getAllAdvisorTeacher() {
+        return userRepository.findAllByAdvisor(Boolean.TRUE)
+                .stream()
+                .map(userMapper::mapUserToUserResponse)
+                .collect(Collectors.toList());
+    }
 }

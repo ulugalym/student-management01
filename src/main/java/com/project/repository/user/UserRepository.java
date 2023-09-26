@@ -2,6 +2,7 @@ package com.project.repository.user;
 
 import com.project.entity.enums.RoleType;
 import com.project.entity.user.User;
+import com.project.payload.response.user.StudentResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,5 +32,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     long countAdmin(RoleType roleType);
 
 
-
+    List<User> findByAdvisorTeacherId(Long id);
 }

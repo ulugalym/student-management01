@@ -34,7 +34,7 @@ public class UserController {
     }
 
     // Note: getAllAdminOrDeanOrViceDean *************************************
-    @GetMapping("/getAllUserByPAge/{userRole}")
+    @GetMapping("/getAllUserByPage/{userRole}")
     @PreAuthorize("hasAnyAuthority('Admin')")
     public ResponseEntity<Page<UserResponse>> getUserByPage(
             @PathVariable String userRole,

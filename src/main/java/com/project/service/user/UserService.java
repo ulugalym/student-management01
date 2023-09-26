@@ -147,6 +147,8 @@ public class UserService {
         // !!! Password Encoder
         updatedUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
+        updatedUser.setUserRole(user.getUserRole());
+
         User saveUser = userRepository.save(updatedUser);
 
         return ResponseMessage.<BaseUserResponse>builder()
@@ -183,7 +185,8 @@ public class UserService {
         user.setName(userRequest.getName());
         user.setSurname(userRequest.getSurname());
         user.setSsn(userRequest.getSsn());
-        //TODO : eksik field control
+        user.setUsername(userRequest.getUsername());
+
 
         userRepository.save(user);
 

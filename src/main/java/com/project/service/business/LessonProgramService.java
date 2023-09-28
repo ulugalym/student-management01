@@ -3,6 +3,9 @@ package com.project.service.business;
 import com.project.entity.business.LessonProgram;
 import com.project.exception.ResourceNotFoundException;
 import com.project.payload.messages.ErrorMessages;
+import com.project.payload.request.business.LessonProgramRequest;
+import com.project.payload.response.business.LessonProgramResponse;
+import com.project.payload.response.business.ResponseMessage;
 import com.project.repository.business.LessonProgramRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,5 +25,9 @@ public class LessonProgramService {
         }
 
         return lessonPrograms;
+    }
+
+    //Note: save() *****************************************
+    public ResponseMessage<LessonProgramResponse> saveLessonProgram(LessonProgramRequest lessonProgramRequest) {
     }
 }

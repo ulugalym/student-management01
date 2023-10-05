@@ -140,4 +140,9 @@ public class EducationTermService {
                 .object(educationTermMapper.mapEducationTermToEducationTermResponse(educationTermUpdated))
                 .build();
     }
+
+    // Note: LessonProgramService icin yazindi
+    public EducationTerm getEducationTermById(Long id){
+        return isEducationTermExist(id);
+    }
 }

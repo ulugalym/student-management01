@@ -23,7 +23,7 @@ public class Lesson {
 
     private Integer creditScore;
 
-    private boolean isCompulsory;
+    private Boolean isCompulsory;
 
     //Note: LessonProgram
 

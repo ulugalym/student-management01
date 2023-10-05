@@ -1,5 +1,6 @@
 package com.project.controller.user;
 
+import com.project.payload.request.business.ChooseLessonTeacherRequest;
 import com.project.payload.request.user.TeacherRequest;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.payload.response.user.StudentResponse;
@@ -46,10 +47,16 @@ public class TeacherController {
         return teacherService.getAllStudentByAdvisorUsername(userName);
     }
 
-    //TODO ; AddLessonProgramToTeachersLessonProgram eklenecek
+    //Note: AddLessonProgramToTeachersLessonProgram eklenecek
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PostMapping("/addLessonProgram")
+    public ResponseMessage<TeacherResponse>chooseLesson(@RequestBody @Valid ChooseLessonTeacherRequest chooseLessonTeacherRequest){
+        return teacherService.addLessonProgram(chooseLessonTeacherRequest);
+    }
+
 
     // Note : SaveAdvisorTeacherByTeacherId() ***********************
-    @PreAuthorize("hasAnyAuthorite('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     @PatchMapping("/saveAdvisorTeacher/{teacherId}")   //http://localhost:8081/teacher/saveAdvisor/1 +PATCH
     public ResponseMessage<UserResponse>saveAdvisorTeacher(@PathVariable Long teacherId){
         return teacherService.saveAdvisorTeacher(teacherId);

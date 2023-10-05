@@ -209,4 +209,9 @@ public class UserService {
 
         return userRepository.countAdmin(RoleType.ADMIN);
     }
+
+    // Note: MeetService icin yazildi **********************************************
+    public List<User>getStudentById(Long[]studentIds){
+        return userRepository.findByIdsEquals(studentIds);
+    }
 }

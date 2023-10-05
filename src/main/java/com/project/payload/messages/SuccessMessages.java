@@ -22,4 +22,16 @@ public class SuccessMessages {
     public static final String LESSON_SAVE = "Lesson is Saved";
     public static final String LESSON_DELETE = "Lesson is Deleted Successfully";
     public static final String LESSON_FOUND = "Lesson is found Successfully";
+    public static final String LESSON_PROGRAM_SAVE = "Lesson Program is saved";
+    public static final String LESSON_PROGRAM_DELETE = "Lesson Program is Deleted Successfully";
+    public static final String LESSON_PROGRAM_ADD_TO_TEACHER = "Lesson Programs added to Teacher";
+    public static final String STUDENT_INFO_SAVE = "Student Info is Saved";
+    public static final String STUDENT_INFO_DELETE = "Student Info is deleted Successfully";
+    public static final String STUDENT_INFO_UPDATE = "Student info is Updated Successfully";
+    public static final String MEET_SAVE = "Meet is Saved";
+    public static final String MEET_DELETE = "Meet is deleted successfully";
+    public static final String MEET_UPDATE = "Meet is Updated Successfully";
+
+
+
 }

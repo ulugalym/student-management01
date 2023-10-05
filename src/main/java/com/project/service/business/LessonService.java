@@ -41,11 +41,11 @@ public class LessonService {
                 .build();
     }
 
-    private boolean isLessonExistByLessonName(String lessonName){
+    private boolean isLessonExistByLessonName(String lessonName) {
         boolean lessonExist = lessonRepository.existsLessonByLessonNameEqualsIgnoreCase(lessonName);
-        if(lessonExist){
+        if (lessonExist) {
             throw new ConflictException(ErrorMessages.LESSON_ALREADY_EXIST);
-        }else {
+        } else {
             return false;
         }
     }
@@ -60,19 +60,19 @@ public class LessonService {
                 .build();
     }
 
-    private Lesson isLessonExistById(Long id){
-        return lessonRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE,id)));
+    public Lesson isLessonExistById(Long id) {
+        return lessonRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE, id)));
     }
 
     //Note: getByName() ********************************
     public ResponseMessage<LessonResponse> getLessonByLessonName(String lessonName) {
-        if(lessonRepository.getLessonByLessonName(lessonName).isPresent()){
+        if (lessonRepository.getLessonByLessonName(lessonName).isPresent()) {
             return ResponseMessage.<LessonResponse>builder()
                     .message(SuccessMessages.LESSON_FOUND)
                     .object(lessonMapper.mapLessonToLessonResponse(lessonRepository.getLessonByLessonName(lessonName).get()))
                     .build();
-        }else {
+        } else {
             return ResponseMessage.<LessonResponse>builder()
                     .message(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE_WITH_LESSON_NAME))
                     .build();
@@ -80,7 +80,7 @@ public class LessonService {
     }
 
     public Page<LessonResponse> findLessonByPage(int page, int size, String sort, String type) {
-        Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort,type);
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
         return
                 lessonRepository.findAll(pageable).map(lessonMapper::mapLessonToLessonResponse);
     }
@@ -89,4 +89,6 @@ public class LessonService {
         return idSet.stream()
                 .map(this::isLessonExistById).collect(Collectors.toSet());
     }
+
+
 }

@@ -89,6 +89,9 @@ public class WebSecurityConfig {
 
     private static final String[]AUTH_WHILE_LIST = {
             "/",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
             "index.html",
             "/css/**",
             "/images/**",

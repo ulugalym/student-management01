@@ -73,7 +73,7 @@ public class EducationTermService {
                 .anyMatch(educationTerm ->
                         (educationTerm.getStartDate().equals(educationTermRequest.getStartDate())
                         ||(educationTerm.getStartDate().isBefore(educationTermRequest.getStartDate())
-                        &&(educationTerm.getEndDate().isBefore(educationTermRequest.getStartDate()))
+                        &&(educationTerm.getEndDate().isAfter(educationTermRequest.getStartDate()))
                         ||(educationTerm.getStartDate().isBefore(educationTermRequest.getEndDate())
                         &&(educationTerm.getEndDate().isAfter(educationTermRequest.getEndDate()))
                         ||educationTerm.getStartDate().isAfter(educationTermRequest.getStartDate()))
@@ -94,7 +94,7 @@ public class EducationTermService {
     private EducationTerm isEducationTermExist(Long id){
 
         return educationTermRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.EDUCATION_TERM_NOT_FOUND_MESSAGE)));
+                new ResourceNotFoundException(String.format(ErrorMessages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id)));
     }
 
     // Note: getAll() ********************************

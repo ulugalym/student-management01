@@ -100,8 +100,8 @@ public class StudentService {
     //Note: updateStudent() **********************************
     public ResponseMessage<StudentResponse> updateStudentForManagers(Long userId, StudentRequest studentRequest) {
         User user = isUserExist(userId);
-        if(user.getUserRole().getRoleType().equals(RoleType.STUDENT)){
-            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_STUDENTS_MESSAGE));
+        if(!user.getUserRole().getRoleType().equals(RoleType.STUDENT)){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_STUDENTS_MESSAGE,userId));
         }
 
         uniquePropertyValidator.checkUniqueProperties(user,studentRequest);

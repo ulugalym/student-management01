@@ -2,6 +2,8 @@ package com.project.payload.messages;
 
 public class ErrorMessages {
 
+
+
     private ErrorMessages(){}
 
     public static final String NOT_PERMITTED_METHOD_MESSAGE = "You do not have any permission to do this operation";
@@ -38,6 +40,7 @@ public class ErrorMessages {
     public static final String NOT_FOUND_USER_WITH_ROLE_MESSAGE = "Error: The role information of the user with id %s is not role: %s";
     public static final String MEET_HOURS_CONFLICT ="Error: Meet hours has conflict with existing meets";
     public static final String MEET_NOT_FOUND_MESSAGE = "Error: Meet not found with id %s";
+    public static final String LESSON_ALREADY_EXIST_WITH_LESSON_NAME = "Error: Lesson is already exist with Lesson Name : %s ";
 
 
 }

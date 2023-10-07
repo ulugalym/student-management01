@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface StudentInfoRepository extends JpaRepository<StudentInfo,Long> {
-    List<StudentInfo> getAllStudentId_Id(Long studentId);
+    List<StudentInfo> getAllByStudentId_Id(Long studentId);
 
     @Query("SELECT s FROM StudentInfo s WHERE s.teacher.username = ?1")
     Page<StudentInfo>findByTeacherId_UsernameEquals(String username, Pageable pageable);

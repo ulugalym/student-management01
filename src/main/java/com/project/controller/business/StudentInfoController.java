@@ -34,7 +34,7 @@ public class StudentInfoController {
     }
 
     // Note : Delete() ************************************
-    @PreAuthorize("hasAnyAuthority('TEACHER','TEACHER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','TEACHER')")
     @DeleteMapping("/delete/{studentInfoId}")
     public ResponseMessage delete(@PathVariable Long studentInfoId){
         return  studentInfoService.deleteStudentInfo(studentInfoId);

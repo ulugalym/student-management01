@@ -18,8 +18,9 @@ public interface LessonProgramRepository extends JpaRepository<LessonProgram,Lon
 
     List<LessonProgram> findByUsers_IdNotNull();
 
-    @Query("SELECT l FROM LessonProgram l INNER JOIN l.users teachers WHERE teachers.username = ?1")
+    @Query("SELECT l FROM LessonProgram l INNER JOIN l.users users WHERE users.username = ?1")
     Set<LessonProgram>getLessonProgramByUsersUsername(String username);
 
 
+    Set<LessonProgram> findByUsers_IdEquals(Long teacherId);
 }

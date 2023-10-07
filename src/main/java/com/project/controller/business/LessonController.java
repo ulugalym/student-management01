@@ -7,6 +7,7 @@ import com.project.payload.response.business.ResponseMessage;
 import com.project.service.business.LessonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +61,11 @@ public class LessonController {
     }
 
     //Note: updateById() ********************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PutMapping("/update/{lessonId}") //http://localhost:8081/lessons/update/3
+    public ResponseEntity<LessonResponse>updateLessonById(@PathVariable Long lessonId,
+                                                          @RequestBody LessonRequest lessonRequest){
+        return ResponseEntity.ok(lessonService.updateLessonById(lessonId,lessonRequest));
+    }
 
 }

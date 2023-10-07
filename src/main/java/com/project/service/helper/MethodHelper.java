@@ -30,7 +30,7 @@ public class MethodHelper {
 
     // !!! Role kontrolu yapan method
     public void checkRole(User user, RoleType roleType){
-        if(user.getUserRole().getRoleType().equals(roleType)){
+        if(!user.getUserRole().getRoleType().equals(roleType)){
             throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_USER_WITH_ROLE_MESSAGE,user.getId(),roleType));
         }
     }

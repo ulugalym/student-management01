@@ -53,8 +53,10 @@ public class StudentInfoService {
         String teacherUsername = (String) httpServletRequest.getAttribute("username");
         User student = teacherService.isUserExist(studentInfoRequest.getStudentId());
         if (!student.getUserRole().getRoleType().equals(RoleType.STUDENT)) {
-            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_STUDENTS_MESSAGE));
+            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_STUDENTS_MESSAGE,
+                    studentInfoRequest.getStudentId()));
         }
+        // TODO : reguestten gelen STudent bu dersi aliyormu koontrolu ??
         User teacher = teacherService.getTeacherByUsername(teacherUsername);
         Lesson lesson = lessonService.isLessonExistById(studentInfoRequest.getLessonId());
         EducationTerm educationTerm = educationTermService.getEducationTermById(studentInfoRequest.getEducationTermId());
@@ -89,7 +91,7 @@ public class StudentInfoService {
 
     private void checkSameLesson(Long studentId, String lessonName) {
 
-        boolean isLessonDuplicationExist = studentInfoRepository.getAllStudentId_Id(studentId)
+        boolean isLessonDuplicationExist = studentInfoRepository.getAllByStudentId_Id(studentId)
                 .stream()
                 .anyMatch(e -> e.getLesson().getLessonName().equalsIgnoreCase(lessonName));
 
@@ -123,6 +125,7 @@ public class StudentInfoService {
     // Note : Delete() ************************************
     public ResponseMessage deleteStudentInfo(Long studentInfoId) {
         StudentInfo studentInfo = isStudentInfoExistById(studentInfoId);
+        //TODO: teacher sadece kendi studentInfosunu silebilsin
         studentInfoRepository.deleteById(studentInfoId);
 
         return ResponseMessage.builder()

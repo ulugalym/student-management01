@@ -140,6 +140,9 @@ public class UserService {
         // !!! id control
         User user = isUserExist(userId);
         // !!! TODO : built_in kontrolu yapilacak
+        if(Boolean.TRUE.equals(user.getBuilt_in())){
+            throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
         // !!! unique controller
         uniquePropertyValidator.checkUniqueProperties(user,userRequest);
         // !!! DTO --> POJO
@@ -173,6 +176,9 @@ public class UserService {
         User user = userRepository.findByUsernameEquals(userName);
 
         // TODO : built_in control (ODEV)
+        if(Boolean.TRUE.equals(user.getBuilt_in())){
+            throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
+        }
 
         // !!! unique control
         uniquePropertyValidator.checkUniqueProperties(user,userRequest);

@@ -67,6 +67,7 @@ public class LessonService {
 
     //Note: getByName() ********************************
     public ResponseMessage<LessonResponse> getLessonByLessonName(String lessonName) {
+        //TODO: IgnoreCase eklenecek
         if (lessonRepository.getLessonByLessonName(lessonName).isPresent()) {
             return ResponseMessage.<LessonResponse>builder()
                     .message(SuccessMessages.LESSON_FOUND)
@@ -74,7 +75,7 @@ public class LessonService {
                     .build();
         } else {
             return ResponseMessage.<LessonResponse>builder()
-                    .message(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE_WITH_LESSON_NAME))
+                    .message(String.format(ErrorMessages.NOT_FOUND_LESSON_MESSAGE_WITH_LESSON_NAME,lessonName))
                     .build();
         }
     }
@@ -91,4 +92,22 @@ public class LessonService {
     }
 
 
+    //Note: updateById() ********************************
+    public LessonResponse updateLessonById(Long lessonId, LessonRequest lessonRequest) {
+        Lesson lesson = isLessonExistById(lessonId);
+        // !!! request ders ismi degisti ise unique olmasi gerekiyor control
+        if(
+                !(lesson.getLessonName().equalsIgnoreCase(lessonRequest.getLessonName()))&&
+                        (lessonRepository.existsByLessonName(lessonRequest.getLessonName()))
+        ){
+            throw new ConflictException(
+                    String.format(ErrorMessages.LESSON_ALREADY_EXIST_WITH_LESSON_NAME,lessonRequest.getLessonName()));
+        }
+        // !!! DTO --> POJO
+        Lesson updatedLesson = lessonMapper.mapUpdateLessonRequestToLesson(lessonRequest,lessonId);
+
+        Lesson savedLesson = lessonRepository.save(updatedLesson);
+
+        return lessonMapper.mapLessonToLessonResponse(savedLesson);
+    }
 }

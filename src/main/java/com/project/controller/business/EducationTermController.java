@@ -29,7 +29,7 @@ public class EducationTermController {
 
     // Note: getById() *******************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public EducationTermResponse getEducationTermById(@PathVariable Long id){
         return educationTermService.getEducationTermResponseById(id);
     }
